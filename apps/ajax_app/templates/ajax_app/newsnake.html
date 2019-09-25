@@ -1,0 +1,8 @@
+<div class="row">
+    <h2>Information for {{snake.name}}</h2>
+</div>
+<div class="row">
+    <p><span class="h5">Name:</span> {{snake.name}}</p>
+    <p><span class="h5">Length:</span> {{snake.length}} feet</p>
+    <p><span class="h5">Venomous:</span>{% if snake.venomous %}Yes{% else %}No{% endif %}</p>
+</div>
