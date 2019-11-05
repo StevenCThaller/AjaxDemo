@@ -3,6 +3,7 @@
         <th>Name</th>
         <th>Length</th>
         <th>Venomous</th>
+        <th>Action</th>
     </thead>
     <tbody>
         {% for snake in all_snakes %}
@@ -16,6 +17,7 @@
                 No
                 {% endif %}
             </td>
+            <td><a id="snakeNumber{{snake.id}}" class="deleteSnake" href="/deletesnake/{{snake.id}}">Delete</a></td>
         </tr>
         {% endfor %}
     </tbody>

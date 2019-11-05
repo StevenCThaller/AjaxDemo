@@ -12,57 +12,67 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            function getSnakes() {
+            var populateTable = function () {
                 $.ajax({
                     url: '/allsnakes',
                     method: 'get',
                     success: function (serverResponse) {
-                        $('.allSnakes').html(serverResponse);
+                        $(".allSnakes").html(serverResponse);
                     }
                 })
             }
-            function clearForm() {
+
+            var oneSnake = function (thisUrl) {
                 $.ajax({
-                    url: '/snakeform',
-                    method: 'get',
+                    url: thisUrl,
                     success: function (serverResponse) {
-                        $('#div_for_form').html(serverResponse)
+                        $(".newinfo").html(serverResponse);
                     }
                 })
             }
-            clearForm();
-            $('.viewAll').click(function (e) {
+
+            $(".viewAll").click(function (e) {
                 e.preventDefault();
-                getSnakes();
+                populateTable();
+            })
+            $(".newForm").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(".newForm").attr("href"),
+                    success: function (serverResponse) {
+                        $("#div_for_form").html(serverResponse);
+                    }
+                })
             })
 
-            $(document).on('submit', '#snakeForm', function (e) {
+            $(document).on("submit", "#snakeForm", function (e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/addsnake',
-                    method: 'post',
+                    url: "/addsnake",
+                    method: "post",
                     data: $(this).serialize(),
                     success: function (serverResponse) {
-                        $('.newinfo').html(serverResponse);
-                        clearForm();
-                    },
-                    error: function (serverResponse) {
-                        clearForm();
+                        $(".newinfo").html(serverResponse);
+                        $("#snakeForm").trigger("reset");
+                        populateTable();
                     }
-
                 })
-                getSnakes();
+            })
+            $(document).on("click", ".deleteSnake", function (e) {
+                e.preventDefault();
+                var thisUrl = $(this).attr("href");
+                $.ajax({
+                    url: thisUrl,
+                    success: function (serverResponse) {
+                        populateTable();
+                    }
+                })
             })
 
-            $(document).on('click', '.seeSnake', function (e) {
+            $(document).on("click", ".seeSnake", function (e) {
                 e.preventDefault();
-                $.ajax({
-                    url: $(this).attr('href'),
-                    method: 'get',
-                    success: function (serverResponse) {
-                        $('.newinfo').html(serverResponse);
-                    }
-                })
+                var thisUrl = $(this).attr("href");
+                oneSnake(thisUrl);
             })
         })
     </script>
@@ -72,7 +82,8 @@
     <div class='container'>
         <h1>Welcome to the Snake Pit</h1>
         <div class="row">
-            <a class="viewAll" href="/allsnakes">View All Snakes</a>
+            <a class="viewAll" href="/allsnakes">View All Snakes</a> | <a class="newForm" href="/snakeform">Add a
+                Snake</a>
         </div>
         <div class="row">
             <div id="div_for_form" class="col-sm-6"></div>
